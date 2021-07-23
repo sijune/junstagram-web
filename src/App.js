@@ -5,22 +5,14 @@ import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 import { isLoggedInVar, isDarkModeVar } from "./apollo";
 import { ThemeProvider } from "styled-components";
-
-const lightTheme = {
-  fontColor: "#2c2c2c",
-  bgColor: "lightgray",
-};
-
-const darkTheme = {
-  fontColor: "lightgray",
-  bgColor: "#2c2c2c",
-};
+import { darkTheme, GlobalStyles, lightTheme } from "./styles";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const isDarkMode = useReactiveVar(isDarkModeVar);
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyles />
       <Router>
         {/* Switch: 한번에 한번씩만 Route 되게 해준다. */}
         <Switch>
