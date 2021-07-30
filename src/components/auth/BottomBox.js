@@ -23,7 +23,7 @@ function BottomBox({ cta, link, linkText }) {
   );
 }
 
-// prop 체크
+// prop
 BottomBox.propTypes = {
   cta: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,

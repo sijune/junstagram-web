@@ -9,6 +9,8 @@ import { ThemeProvider } from "styled-components";
 import { darkTheme, GlobalStyles, lightTheme } from "./styles";
 import routes from "./routes";
 import { HelmetProvider } from "react-helmet-async";
+import Header from "./components/Header";
+import Layout from "./components/Layout";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -22,7 +24,13 @@ function App() {
             {/* Switch: 한번에 한번씩만 Route 되게 해준다. */}
             <Switch>
               <Route path={routes.home} exact>
-                {isLoggedIn ? <Home /> : <Login />}
+                {isLoggedIn ? (
+                  <Layout>
+                    <Home />
+                  </Layout>
+                ) : (
+                  <Login />
+                )}
               </Route>
               {/* 일치하지 않는 path로 요청이 들어오면 라우팅 되는 곳, redirect를 사용할 수도 있다. */}
               {!isLoggedIn ? (
