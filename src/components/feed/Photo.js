@@ -12,6 +12,7 @@ import Avatar from "../Avatar";
 import { FatText } from "../shared";
 import { gql, useMutation } from "@apollo/client";
 import Comments from "./Comments";
+import { Link } from "react-router-dom";
 
 const TOGGLE_LIKE_MUTATION = gql`
   mutation toggleLike($id: Int!) {
@@ -90,7 +91,24 @@ function Photo({
       },
     } = result;
     if (ok) {
-      const fragmentId = `Photo:${id}`;
+      const photoId = `Photo:${id}`;
+      // apollo 3 에서 추가된 내용
+      cache.modify({
+        id: photoId,
+        fields: {
+          //함수로 이전의 값을 넘긴다.
+          isLiked(prev) {
+            return !prev;
+          },
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            }
+            return prev + 1;
+          },
+        },
+      });
+      /*
       const fragment = gql`
         fragment BSName on Photo {
           isLiked
@@ -120,6 +138,7 @@ function Photo({
           },
         });
       }
+      */
     }
   };
   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
@@ -131,8 +150,12 @@ function Photo({
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
-        <Avatar lg url={user.avatar} />
-        <Username>{user.username}</Username>
+        <Link to={`/users/${user.username}`}>
+          <Avatar lg url={user.avatar} />
+        </Link>
+        <Link to={`/users/${user.username}`}>
+          <Username>{user.username}</Username>
+        </Link>
       </PhotoHeader>
       <PhotoFile src={file} />
       <PhotoData>
@@ -157,6 +180,7 @@ function Photo({
         </PhotoActions>
         <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
         <Comments
+          photoId={id}
           author={user.username}
           caption={caption}
           commentNumber={commentNumber}
