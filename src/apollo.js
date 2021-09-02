@@ -35,7 +35,13 @@ export const disableDarkMode = () => {
 };
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  // 빌드 시 NODE_ENV와 함께 빌드된다.
+  // 개발 시엔 로컬 url
+  // 운영 시엔 heroku url
+  uri:
+    process.env.NODE_ENV === "production"
+      ? "https://justagram-backend.herokuapp.com/graphql"
+      : "http://localhost:4000/graphql",
 });
 
 //token설정을 추가적으로 해야한다. link: Apollo 클라이언트가 데이터 소스와 소통하는 방식
